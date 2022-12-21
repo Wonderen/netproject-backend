@@ -8,7 +8,7 @@ users = {'admin': 'admin', 'user1': '123'}
 async def root():
     return {"message": "you are shakh"}
 
-@app.post("/login/{user_name}/{password}")
+@app.post("/login/")
 async def login(user_name: str , password: str):
     if user_name in users.keys():
         if password == users[user_name]:

@@ -13,9 +13,14 @@ class User(Base):
     user_password = Column(String)
     user_role = Column(String)
 
+    comments = relationship("Comment", back_populates="owner")
+
 class Comment(Base):
     __tablename__ = "comment_info"
 
     hashtags = Column(Integer)
     message = Column(Text)
     comment_id = Column(Integer, primary_key=True)
+    owner_id = Column(Integer, ForeignKey("user_info.student_num"))
+
+    owner = relationship("User", back_populates="comments")

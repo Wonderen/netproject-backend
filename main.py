@@ -64,10 +64,8 @@ async def login(login_info:UserLogin, db: Session = Depends(get_db)):
     password = a['password']
 
     db_user = crud.get_user_by_student_num(db,  student_number)
-    print(db_user)
-    print(type(db_user))
     if db_user is None:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
     
     #TODO
 
@@ -81,8 +79,6 @@ async def signup(signup_info:UserSignUp, db: Session = Depends(get_db)):
     password = a['password']
     print(a)
     db_user = crud.create_user(db,  signup_info)
-    print(db_user)
-    print(type(db_user))
     # if db_user is None:
     #     raise HTTPException(status_code=404, detail="User not found")
     # if student_number in users.keys():

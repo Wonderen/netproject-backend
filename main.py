@@ -1,8 +1,22 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, status, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from sql_app import crud, model
+from sql_app.database import SessionLocal, engine
+from sqlalchemy.orm import Session
+
+
+model.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+# dependency
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 origins = [
     "localhost",
@@ -24,6 +38,11 @@ app.add_middleware(
 users = {'admin': 'admin', 'user1': '123'}
 
 class UserLogin(BaseModel):
+    student_number: str
+    password: str 
+    user_name: str | None = None
+
+class UserSignUp(BaseModel):
     user_name: str
     password: str 
     student_number: str | None = None
@@ -34,15 +53,18 @@ async def root():
     return {"message": "you are shakh"}
 
 @app.post("/login/")
-async def login(login_info:Request):
-    a = (await login_info.json())
-    print(a)
-    user_name = a['user_name']
+async def login(login_info:UserLogin, db: Session = Depends(get_db)):
+    import json
+
+    a = (login_info.json())
+    a = json.loads(a)
+    student_number = a['student_number']
     password = a['password']
-    if user_name in users.keys():
-        if password == users[user_name]:
-            return {"message": f"welcome {user_name}"}
-        else:
-            return {"message": "incorrect password"}
-    else:
-            return {"message": "not register"}
+
+    db_user = crud.get_user_by_student_num(db,  student_number)
+    print(db_user)
+    print(type(db_user))
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    #TODO

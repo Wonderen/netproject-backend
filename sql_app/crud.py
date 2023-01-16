@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 from . import model, schemas
+from utils.hash import make_hash
 
 def get_user_by_student_num(db: Session, student_num: int):
     return db.query(model.User).filter(model.User.student_num == student_num).first()
@@ -11,7 +12,7 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
     return db.query(model.User).offset(skip).limit(limit).all()
 
 def create_user(db: Session, user: schemas.UserCreate):
-    fake_hashed_password = user.password + "nothashed"
+    fake_hashed_password = make_hash(user.password)
     db_user = model.User(student_num = user.student_number, user_password=fake_hashed_password)
     db.add(db_user)
     db.commit()

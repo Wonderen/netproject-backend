@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from sql_app import crud, model
 from sql_app.database import SessionLocal, engine
 from sqlalchemy.orm import Session
+from utils.hash import make_hash
 
 
 model.Base.metadata.create_all(bind=engine)
@@ -66,7 +67,7 @@ async def login(login_info:UserLogin, db: Session = Depends(get_db)):
     db_user = crud.get_user_by_student_num(db,  student_number)
     if db_user is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-    if db_user.user_password != password:
+    if db_user.user_password != make_hash(password):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Wrong password")
 
     return {"message": f"Welcome {db_user.user_name}!"}

@@ -6,12 +6,12 @@ from sqlalchemy.types import Text
 class User(Base):
     __tablename__ = "user_info"
 
-    user_name  = Column(String)
+    user_name  = Column(String(20))
     student_num = Column(Integer, primary_key=True)
-    user_email = Column(String)
+    user_email = Column(String(64))
     phone_num = Column(Integer)
-    user_password = Column(String)
-    user_role = Column(String)
+    user_password = Column(String(22))
+    user_role = Column(String(20))
 
     comments = relationship("Comment", back_populates="owner")
 

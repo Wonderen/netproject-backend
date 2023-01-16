@@ -19,6 +19,8 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     password: str
+    username: str
+    phone_num: int
 
 class User(UserBase):
     student_num:int

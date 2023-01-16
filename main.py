@@ -44,8 +44,10 @@ class UserLogin(BaseModel):
 
 class UserSignUp(BaseModel):
     user_name: str
-    password: str 
-    student_number: str | None = None
+    student_number: str
+    phone_number: str
+    password: str
+
 
 
 @app.get("/")
@@ -67,4 +69,24 @@ async def login(login_info:UserLogin, db: Session = Depends(get_db)):
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
     
+    #TODO
+
+@app.post("/signup/")
+async def signup(signup_info:UserSignUp, db: Session = Depends(get_db)):
+    import json
+
+    a = (signup_info.json())
+    a = json.loads(a)
+    student_number = a['student_number']
+    password = a['password']
+    print(a)
+    db_user = crud.create_user(db,  signup_info)
+    print(db_user)
+    print(type(db_user))
+    # if db_user is None:
+    #     raise HTTPException(status_code=404, detail="User not found")
+    # if student_number in users.keys():
+    #     raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="already signed up")
+    # users[student_number] = password
+    return {"message": f"welcome {student_number}"}
     #TODO

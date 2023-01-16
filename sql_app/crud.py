@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from . import model, schemas
 
-def get_user(db: Session, student_num: int):
+def get_user_by_student_num(db: Session, student_num: int):
     return db.query(model.User).filter(model.User.student_num == student_num).first()
 
 def get_user_by_email(db: Session, user_email: str):

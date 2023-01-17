@@ -90,3 +90,7 @@ async def signup(signup_info:UserSignUp, db: Session = Depends(get_db)):
     # users[student_number] = password
     return {"message": f"welcome {student_number}"}
     #TODO
+
+@app.post("/questionnaire/")
+async def questionnaire(questionnaire_info:CommentCreate, db: Session = Depends(get_db)):
+    #TODO

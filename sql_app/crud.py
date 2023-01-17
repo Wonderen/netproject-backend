@@ -11,7 +11,7 @@ def get_user_by_email(db: Session, user_email: str):
 def get_users(db: Session, skip: int = 0, limit: int = 100):
     return db.query(model.User).offset(skip).limit(limit).all()
 
-def create_user(db: Session, user: schemas.UserCreate):
+def create_user(db: Session, user: schemas.UserSignUp):
     fake_hashed_password = make_hash(user.password)
     db_user = model.User(student_num = user.student_number, user_password=fake_hashed_password)
     db.add(db_user)

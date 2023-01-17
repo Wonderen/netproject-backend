@@ -9,7 +9,6 @@ class CommentCreate(CommentBase):
 
 class Comment(CommentBase):
     comment_id: int
-    owner_id: int
 
     class Config:
         orm_mode = True
@@ -17,10 +16,16 @@ class Comment(CommentBase):
 class UserBase(BaseModel):
     student_num: int
 
-class UserCreate(UserBase):
+class UserSignUp(BaseModel):
+    user_name: str
+    student_number: str
+    phone_number: str
     password: str
-    username: str
-    phone_num: int
+
+class UserLogin(BaseModel):
+    student_number: str
+    password: str 
+    user_name: str | None = None
 
 class User(UserBase):
     student_num:int

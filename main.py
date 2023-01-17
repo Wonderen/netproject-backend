@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from sql_app import crud, model
 from sql_app.database import SessionLocal, engine
+from sql_app.schemas import *
 from sqlalchemy.orm import Session
 from utils.hash import make_hash
 
